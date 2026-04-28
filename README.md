@@ -1,0 +1,108 @@
+# Candela — Real-Time Chatroom
+
+A premium, glassmorphism-styled chatroom web application built with Flask and Supabase.
+
+Join rooms instantly as a guest, or register to unlock profile customization, avatars, and more.
+
+## Features
+
+- **Guest Access:** Join any public room instantly with no signup.
+- **Account Registration:** Reserve usernames, set avatars, and manage your profile.
+- **Real-Time Chat:** Messages refresh every 2 seconds with image, PDF, and GIF attachments.
+- **Emoji Picker:** Built-in emoji support with big-emoji rendering for single-emoji messages.
+- **Room System:** Create public or password-protected rooms, invite users, and delete rooms.
+- **Room Invitations:** Invite online users via toast notifications with a 10-second timer.
+- **Profile Management:** DiceBear avatars (4 styles), custom image uploads, inline username editing.
+- **Glassmorphism UI:** Frosted-glass effects, gradient backgrounds, and smooth animations.
+
+## Tech Stack
+
+| Layer | Technologies |
+| --- | --- |
+| Backend | Python 3.10+, Flask, Flask-Session, bcrypt |
+| Database | Supabase (PostgreSQL) |
+| Frontend | Vanilla JS, Vanilla CSS, Bootstrap 5.3, Bootstrap Icons |
+| APIs | DiceBear (avatars), Google Fonts (Open Sans) |
+
+## Setup
+
+### Prerequisites
+
+- Python 3.10+
+- A Supabase project (free tier works)
+
+### 1) Clone and install
+
+```bash
+git clone https://github.com/nouredotma/Candela.git
+cd Candela
+pip install -r requirements.txt
+```
+
+### 2) Configure Supabase
+
+Create a `.env` file in the project root:
+
+```env
+SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_KEY=your-service-role-secret-key
+```
+
+Where to find these:
+Supabase Dashboard -> Settings -> API -> Project URL and `service_role` secret key.
+
+### 3) Create database tables
+
+- Open Supabase Dashboard -> SQL Editor
+- Paste the contents of `setup_database.sql`
+- Run without RLS
+
+### 4) Run the app
+
+```bash
+python app.py
+```
+
+Open `http://localhost:5000`. The app runs on port 5000 and is accessible on your local network.
+
+## Project Structure
+
+```text
+Candela/
+├── app.py                  # Flask backend: routes and Supabase queries
+├── requirements.txt        # Python dependencies
+├── setup_database.sql      # SQL script for Supabase table creation
+├── .env                    # Supabase credentials (not committed)
+│
+├── templates/
+│   ├── index.html          # Login/Join page (Guest, Login, Register tabs)
+│   └── chat.html           # Main chat interface (3-column layout)
+│
+├── static/
+│   ├── style.css           # Glassmorphism stylesheet
+│   ├── chat.js             # Client-side logic (polling, rendering, interactions)
+│   ├── emojis.js           # Emoji data
+│   ├── img/                # Logo and login illustration
+│   └── uploads/            # User-uploaded files (avatars, images, PDFs)
+│
+└── flask_session/          # Server-side session files (auto-generated)
+```
+
+## Database
+
+Candela uses Supabase (PostgreSQL) with 6 tables:
+
+| Table | Purpose |
+| --- | --- |
+| users | Registered accounts (bcrypt-hashed passwords, avatar info) |
+| rooms | Room definitions (name, creator, password, security status) |
+| room_authorized_users | Users authorized to access password-protected rooms |
+| messages | All chat messages across all rooms |
+| online_users | Heartbeat-based presence tracking (15-second timeout) |
+| invitations | Pending room invitations (60-second expiry) |
+
+The schema is defined in `setup_database.sql`.
+
+## License
+
+This project is open source and available under the MIT License.
